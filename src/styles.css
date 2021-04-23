@@ -5,20 +5,111 @@
     border-radius: 10px;
     padding: 20px;
     font-size: 20px;
+    box-shadow: 0 8px 5px -9px black;
+}
+
+.configure-quiz {
+    display: flex;
+    position: relative;
+    margin: 20px;
+    border-radius: 10px;
+    padding: 20px;
+    font-size: 20px;
+    box-shadow: 0 8px 5px -9px black;
+}
+
+.option.correct {
+    background-color: #E2ECE9;
+}
+
+.option.correct:hover {
+    background-color: #cadfd8;
+}
+.option.correct:disabled {
+    background-color: #cadfd8;
+}
+
+.option.wrong {
+    background-color: #FAD2E1;
+}
+
+.option.wrong:disabled {
+    background-color: #FAD2E1;
+}
+
+.option.wrong:hover {
+    background-color: #d6b3c0;
+}
+
+option.next-question {
+    background-color: burlywood;
+}
+
+.configure-quiz hr {
+    margin-bottom: 20px;
+    margin-top: 20px;
+}
+
+.config-options {
+    margin-right: 20px;
 }
 
 .option-list {
-    margin-top: 20px;
+    margin-top: 30px;
     margin-left: 100px;
     margin-right: 100px;
     display: grid;
-    gap: 20px;
+    grid-template-columns: auto auto;
+    gap: 13px;
 }
 
 .option {
     height: 40px;
 }
 
+.next-question {
+    margin-top: 20px;
+    margin-left: 100px;
+    margin-right: 100px;
+    display: grid;
+    grid-template-columns: auto;
+    gap: 13px;
+}
+
+.time-remaining {
+    margin-left: 105px;
+    margin-top: 20px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 20px;
+    color:rgb(95, 95, 95);
+    transform: translateY(20px);
+}
+
 .MuiButton-root.option {
     border-radius: 13px;
+}
+
+body {
+    background: linear-gradient(295deg, #fff1e6, #dfe7fd, #fde2e4);
+    background-size: 600% 600%;
+
+    -webkit-animation: AnimationName 22s ease infinite;
+    -moz-animation: AnimationName 22s ease infinite;
+    animation: AnimationName 22s ease infinite;
+}
+
+@-webkit-keyframes AnimationName {
+    0%{background-position:0% 68%}
+    50%{background-position:100% 33%}
+    100%{background-position:0% 68%}
+}
+@-moz-keyframes AnimationName {
+    0%{background-position:0% 68%}
+    50%{background-position:100% 33%}
+    100%{background-position:0% 68%}
+}
+@keyframes AnimationName {
+    0%{background-position:0% 68%}
+    50%{background-position:100% 33%}
+    100%{background-position:0% 68%}
 }
