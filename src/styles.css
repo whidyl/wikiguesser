@@ -73,12 +73,24 @@ option.next-question {
 
 .option-list {
     margin-top: 30px;
-    margin-left: 10%;
-    margin-right: 10%;
-    display: grid;
-    grid-template-columns: auto auto;
-    gap: 13px;
+        margin-left: 10%;
+        margin-right: 10%;
+        display: grid;
+        grid-template-columns: auto;
+        gap: 13px;
 }
+
+@media (min-width: 400px) {
+    .option-list {
+        margin-top: 30px;
+        margin-left: 10%;
+        margin-right: 10%;
+        display: grid;
+        grid-template-columns: auto auto;
+        gap: 13px;
+    }
+}
+
 
 .option {
     height: 40px;

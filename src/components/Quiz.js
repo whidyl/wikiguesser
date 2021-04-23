@@ -3,7 +3,7 @@ import MCQuestion from './MCQuestion';
 import TypedQuestion from './TypedQuestion'
 import axios from 'axios';
 
-const Quiz = ({timeLimit, score, setScore, date}) => {
+const Quiz = ({timeLimit, score, setScore, date, endGame}) => {
     const [articles, setArticles] = useState([]);
     const [timeLeft, setTimeLeft] = useState(60*timeLimit);
     const [timerID, setTimerID] = useState("");
@@ -37,6 +37,17 @@ const Quiz = ({timeLimit, score, setScore, date}) => {
         })
     }, []);
 
+    useEffect(( () => {
+        if (timeLeft === 10) {
+            document.getElementById("ticking-audio").play();
+            document.getElementById("ticking-audio").loop = true;
+        }
+        if( timeLeft < 0) {
+            document.getElementById("ticking-audio").pause();
+            endGame();
+        }
+    }), [timeLeft])
+
     const pauseTimer = () => {
         clearInterval(timerID);
         setTimerID("");
@@ -65,6 +76,7 @@ const Quiz = ({timeLimit, score, setScore, date}) => {
     }
 
     const updateScoreWrong = () => {
+        document.getElementById('wrong-audio').play();
         setScore(score - 1);
     }
 

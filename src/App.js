@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import Quiz from './components/Quiz'
 import ConfigureQuiz from './components/ConfigureQuiz'
-
+import QuizOverScreen from './components/QuizOverScreen'
 const App = () => {
     const [appState, setAppState] = useState("config");
     const [timeLimit, setTimeLimit] = useState(1);
@@ -18,7 +18,9 @@ const App = () => {
                                     enableTyped={enableTyped} setEnableTyped={setEnableTyped} startGame={() => setAppState("playing")} 
                                     date={date} setDate={setDate}/>;
             case "playing":
-                return <Quiz timeLimit={timeLimit} score={score} setScore={setScore} date={date}/>
+                return <Quiz timeLimit={timeLimit} score={score} setScore={setScore} date={date} endGame={() => {setAppState("end")}}/>
+            case "end":
+                return <QuizOverScreen score={score} timeLimit={timeLimit} restart={() => {setAppState("config");  setScore(0)}}/>;
             default:
                 return <h1>Something went wrong.</h1>
         }
