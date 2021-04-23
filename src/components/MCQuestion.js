@@ -9,7 +9,7 @@ const QButton = withStyles({
     }
 })(Button);
 
-const MCQuestion = ({article, pickNewArticle, pauseTimer, startTimer}) => {
+const MCQuestion = ({article, pickNewArticle, pauseTimer, startTimer, onUserWrong, onUserRight}) => {
     const [articleExtract, setArticleExtract] = useState("");
     const [articleExtractReveal, setArticleExtractReveal] = useState("");
     const [userSelection, setUserSelection] = useState("");
@@ -18,6 +18,7 @@ const MCQuestion = ({article, pickNewArticle, pauseTimer, startTimer}) => {
     useEffect(() => {
         const fetchArticle = async () => {
             const { data } = await axios.get(`https://en.wikipedia.org/api/rest_v1/page/summary/${article}`);
+
             // Omit name of article from extract
             var regex = /<b>((.|\n)*?)<\/b>/
             let bolded = data.extract_html.match(regex);
@@ -26,17 +27,41 @@ const MCQuestion = ({article, pickNewArticle, pauseTimer, startTimer}) => {
             setArticleExtractReveal(data.extract);
             let extractOmitted = data.extract;
             console.log(extractOmitted);
-            extractOmitted = extractOmitted.replaceAll(bolded[1], "_____");
+
+            try {
+                extractOmitted = extractOmitted.replaceAll(bolded[1], "_____");
+            } catch {
+                pickNewArticle();
+            }
             
-            wordsInTitle.forEach(word => {extractOmitted = extractOmitted.replaceAll(new RegExp(word, "ig"), "_____")});
+            try {
+                wordsInTitle.forEach(word => {extractOmitted = extractOmitted.replaceAll(new RegExp(`\\b${word}\\b`, "ig"), "_____")});
+            } catch {
+                pickNewArticle();
+            }
+
+            // remove repetitive blanks
+            extractOmitted = extractOmitted.replaceAll(/(( _____){2,})/g, "_____")
+            // If there's a lot of blanks, just find a new article because the question is confusing.
+            if ((extractOmitted.match(/(_____)/g) || []).length > 10 ) {
+                pickNewArticle();
+            }
+            setUserSelection("");
             setArticleExtract(extractOmitted);
+            
         }
 
         const fetchOptions = async () => {
             // Get names of things in related category to use for other options
             const { data } = await axios.get(`https://en.wikipedia.org/w/api.php?format=json&origin=*&action=query&prop=categories&titles=${article}`);
             const pageKey = Object.keys(data.query.pages)[0];
-            const categories = data.query.pages[pageKey].categories.splice(0, 3).map(category => category.title.replaceAll(" ", "%20"));
+
+            let categories = []
+            try {
+                categories = data.query.pages[pageKey].categories.splice(0, 3).map(category => category.title.replaceAll(" ", "%20"));
+            } catch {
+                pickNewArticle();
+            }
 
             var optionsTemp = await Promise.all(categories.map(async (category) => {
                 const response = await axios.get(`https://en.wikipedia.org/w/api.php?format=json&origin=*&action=query&list=categorymembers&cmlimit=500&cmtitle=${category}`);
@@ -54,6 +79,11 @@ const MCQuestion = ({article, pickNewArticle, pauseTimer, startTimer}) => {
     }, [article])
 
     const onUserAnswer = (answer) => {
+        if (answer === article.replaceAll("_", " ")) {
+            onUserRight();
+        } else {
+            onUserWrong();
+        }
         setUserSelection(answer);
         pauseTimer();
     } 
@@ -61,13 +91,10 @@ const MCQuestion = ({article, pickNewArticle, pauseTimer, startTimer}) => {
     const nextQuestion = () => {
         pickNewArticle(); 
         setOptions(["...", "...", "...", "..."]);
-        setUserSelection("");
         startTimer();
     }
 
     const renderButtons = options.map(option => {
-        console.log(options);
-        console.log(userSelection);
         let highlight = "";
         if (userSelection) {
             if (option === article.replaceAll("_", " ")) {
@@ -81,6 +108,7 @@ const MCQuestion = ({article, pickNewArticle, pauseTimer, startTimer}) => {
             <QButton 
                 onClick={(e) => {onUserAnswer(option)}} 
                 className={`option ${highlight}`} 
+                style={{fontSize: "min(3vw, 18px, 3vh)"}}
                 disabled={userSelection}
                 variant="contained"
             >
@@ -91,7 +119,7 @@ const MCQuestion = ({article, pickNewArticle, pauseTimer, startTimer}) => {
 
     return (
         <div className="question">
-            <Card className="card" variant="outlined">
+            <Card className="card" variant="outlined" style={{fontSize: "min(3vw, 24px, 3vh)"}}>
                 {userSelection ? articleExtractReveal : articleExtract}
             </Card>
             <div className="option-list">
