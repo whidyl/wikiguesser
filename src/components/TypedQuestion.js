@@ -1,25 +1,22 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
-import { Card, Button } from '@material-ui/core'
+import { Card, TextField } from '@material-ui/core'
 
 const TypedQuestion = ({article}) => {
+    //TODO: add cloesness of text to answer
     const [articleExtract, setArticleExtract] = useState("");
-    const [options, setOptions] = useState([]);
+    const cardRef = useRef(null);
 
     useEffect(() => {
         const fetchArticle = async () => {
             const { data } = await axios.get(`https://en.wikipedia.org/api/rest_v1/page/summary/${article}`);
-            console.log(data);
+
             // Omit name of article from extract
             var regex = /<b>((.|\n)*?)<\/b>/
             let bolded = data.extract_html.match(regex);
-            console.log("bolded:");
-            console.log(bolded[1]);
-
 
             let wordsInTitle = article.split("_");
             let extractOmitted = data.extract;
-            console.log(extractOmitted);
             extractOmitted = extractOmitted.replaceAll(bolded[1], "_____")
             wordsInTitle.forEach(word => {extractOmitted = extractOmitted.replaceAll(new RegExp(word, "ig"), "_____")});
             setArticleExtract(extractOmitted);
@@ -27,20 +24,24 @@ const TypedQuestion = ({article}) => {
         fetchArticle();
     }, [article])
 
-    const renderButtons = options.map(option => {
-        return (
-            <Button className="option" variant="contained">{option}</Button>
-        )
-    });
-
     return (
         <div className="question">
+            <div ref={cardRef}>
             <Card className="card" variant="outlined">
                 {articleExtract}
             </Card>
-            <div className="option-list">
-                {renderButtons}
             </div>
+            <TextField
+                id="outlined-full-width"
+                style={{ marginTop: "20px", marginLeft: "100px", marginRight: "100px", width: "auto"}}
+                placeholder="Placeholder"
+                helperText="Close!"
+                margin="normal"
+                InputLabelProps={{
+                    shrink: true,
+                }}
+                variant="outlined"
+            />
         </div>
     );
 }
