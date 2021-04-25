@@ -2,12 +2,15 @@ import React, { useEffect, useState } from 'react';
 import MCQuestion from './MCQuestion';
 import { CircularProgress } from '@material-ui/core';
 import axios from 'axios';
+import useSoundEffects from '../hooks/useSoundEffects';
 
 const Quiz = ({timeLimit, score, setScore, date, endGame, location}) => {
     const [articles, setArticles] = useState([]);
     const [timeLeft, setTimeLeft] = useState(60*timeLimit);
     const [timerID, setTimerID] = useState("");
     const [currentIndex, setCurrentIndex] = useState(Math.floor(Math.random() * 999));    
+
+    useSoundEffects(timeLeft, endGame);
 
     useEffect(() => {
         //TODO: current month and day
@@ -33,17 +36,6 @@ const Quiz = ({timeLimit, score, setScore, date, endGame, location}) => {
             clearInterval(timerID);
         })
     }, [date, location]);
-
-    useEffect(( () => {
-        if (timeLeft === 10) {
-            document.getElementById("ticking-audio").play();
-            document.getElementById("ticking-audio").loop = true;
-        }
-        if( timeLeft < 0) {
-            document.getElementById("ticking-audio").pause();
-            endGame();
-        }
-    }), [timeLeft])
 
     const pauseTimer = () => {
         clearInterval(timerID);
