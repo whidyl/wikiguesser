@@ -26,7 +26,6 @@ const MCQuestion = ({article, pickNewArticle, pauseTimer, startTimer, onUserWron
             let wordsInTitle = article.split("_");
             setArticleExtractReveal(data.extract);
             let extractOmitted = data.extract;
-            console.log(extractOmitted);
 
             try {
                 extractOmitted = extractOmitted.replaceAll(bolded[1], "_____");
@@ -66,16 +65,23 @@ const MCQuestion = ({article, pickNewArticle, pauseTimer, startTimer, onUserWron
             var optionsTemp = await Promise.all(categories.map(async (category) => {
                 const response = await axios.get(`https://en.wikipedia.org/w/api.php?format=json&origin=*&action=query&list=categorymembers&cmlimit=500&cmtitle=${category}`);
                 const members = response.data.query.categorymembers;
-                return members[[Math.floor(Math.random() * members.length)]].title;
+                //re-pull option if it is a category 
+                let option = "Category:"
+                while (option.includes("Category:")) {
+                    option = members[[Math.floor(Math.random() * members.length)]].title.replaceAll(/\(([^)]+)\)/g, "");
+                }
+                //pull a random option from category and strip out paranthetical info
+                return option;
             }))
 
-            optionsTemp.push(article.replaceAll("_", " "));
+            optionsTemp.push(article.replaceAll("_", " ").replaceAll(/\(([^)]+)\)/g, ""));
+            // remove duplicates
+            optionsTemp = [... new Set(optionsTemp)];
             shuffleArray(optionsTemp);
             setOptions(optionsTemp);
         }
         fetchArticle();
         fetchOptions();
-        console.log(article);  
     }, [article])
 
     const onUserAnswer = (answer) => {
@@ -106,10 +112,10 @@ const MCQuestion = ({article, pickNewArticle, pauseTimer, startTimer, onUserWron
         
         return (
             <QButton 
-                onClick={(e) => {onUserAnswer(option)}} 
+                onClick={(e) => {onUserAnswer(option)}}
                 className={`option ${highlight}`} 
                 style={{fontSize: "min(3vw, 18px, 3vh)"}}
-                disabled={userSelection}
+                disabled={userSelection !== ""}
                 variant="contained"
             >
                 {option}

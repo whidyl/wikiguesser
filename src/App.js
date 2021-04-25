@@ -18,7 +18,7 @@ const App = () => {
                                     enableTyped={enableTyped} setEnableTyped={setEnableTyped} startGame={() => setAppState("playing")} 
                                     date={date} setDate={setDate}/>;
             case "playing":
-                return <Quiz timeLimit={timeLimit} score={score} setScore={setScore} date={date} endGame={() => {setAppState("end")}}/>
+                return <Quiz timeLimit={timeLimit} score={score} setScore={setScore} date={date} location={location} endGame={() => {setAppState("end")}}/>
             case "end":
                 return <QuizOverScreen score={score} timeLimit={timeLimit} restart={() => {setAppState("config");  setScore(0)}}/>;
             default:

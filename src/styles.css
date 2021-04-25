@@ -31,6 +31,10 @@
     background-color: #FAD2E1;
 }
 
+.Mui-focused {
+    background-color: #FAD2E1;
+}
+
 .option.wrong:hover {
     background-color: #d6b3c0;
 }

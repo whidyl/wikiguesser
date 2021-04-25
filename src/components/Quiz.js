@@ -1,41 +1,38 @@
 import React, { useEffect, useState } from 'react';
 import MCQuestion from './MCQuestion';
-import TypedQuestion from './TypedQuestion'
+import { CircularProgress } from '@material-ui/core';
 import axios from 'axios';
 
-const Quiz = ({timeLimit, score, setScore, date, endGame}) => {
+const Quiz = ({timeLimit, score, setScore, date, endGame, location}) => {
     const [articles, setArticles] = useState([]);
     const [timeLeft, setTimeLeft] = useState(60*timeLimit);
     const [timerID, setTimerID] = useState("");
-    const [currentIndex, setCurrentIndex] = useState(Math.floor(Math.random() * 999));
-
-    
+    const [currentIndex, setCurrentIndex] = useState(425);//Math.floor(Math.random() * 999));    
 
     useEffect(() => {
         //TODO: current month and day
         //TODO: if bottom of 1k, do a multiple choice question.
         const fetchArticles = async () => {
             const prevDate = new Date(date);
-            prevDate.setDate(prevDate.getDate() - 1);
-            console.log(prevDate);
+            prevDate.setDate(prevDate.getDate() - 2);
             
             const year = prevDate.getUTCFullYear();
             const month = (prevDate.getUTCMonth() + 1).toLocaleString('en-US', {minimumIntegerDigits: 2});
             const day = prevDate.getUTCDate().toLocaleString('en-US', {minimumIntegerDigits: 2});
+
             console.log(`${year}/${month}/${day}`);
 
-            const { data } = await axios.get(`https://wikimedia.org/api/rest_v1/metrics/pageviews/top-per-country/US/all-access/${year}/${month}/${day}`);
+            const { data } = await axios.get(`https://wikimedia.org/api/rest_v1/metrics/pageviews/top-per-country/${location}/all-access/${year}/${month}/${day}`);
             setArticles(data.items[0].articles.map(info => info.article));
         }
         fetchArticles();
 
         //Start timer
-        startTimer();
-
+        const timerID = startTimer();
         return (() => {
             clearInterval(timerID);
         })
-    }, []);
+    }, [date, location]);
 
     useEffect(( () => {
         if (timeLeft === 10) {
@@ -86,8 +83,9 @@ const Quiz = ({timeLimit, score, setScore, date, endGame}) => {
         return date.toISOString().substr(14, 5);
     }
 
-    return (
-        <div className="question-container">
+    const renderQuestion = () => {
+        return (
+            <div className="question-container">
             <div className="time-remaining">
                 <b>
                     {`${timeString()} ${timerID ? "" : "(PAUSED)"}`}
@@ -112,6 +110,11 @@ const Quiz = ({timeLimit, score, setScore, date, endGame}) => {
                 null
             }
         </div>
+        );
+    }
+
+    return (
+        articles.length === 0 ? <CircularProgress style={{margin:  "50%"}}/> : renderQuestion()
     );
 }
 

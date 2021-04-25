@@ -8,7 +8,7 @@ const QuizOverScreen = ({score, timeLimit, restart}) => {
             <div style={{width: "100%"}}>
             <Typography variant="h1" style={{fontSize: "min(8vw, 8vh, 30px)"}}> You scored {score} points in {timeLimit*60} seconds.</Typography>
             </div>
-            <Button onClick={() => restart()} className="config-options" variant="secondary" style={{backgroundColor: "#E2ECE9", height: "min(55px, 6vw)"}}><b>Play Again</b></Button>
+            <Button onClick={() => restart()} className="config-options" variant="outlined" style={{backgroundColor: "#E2ECE9", height: "min(55px, 6vw)"}}><b>Play Again</b></Button>
             <Typography color="textSecondary" style={{fontSize: "min(3vw, 20px, 3vh)"}} gutterBottom>
                 Thanks for playing!
                 

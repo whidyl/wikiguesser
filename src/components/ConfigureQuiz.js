@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Button, Card, CardContent, Typography, Select, FormControl, InputLabel } from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
 
@@ -42,12 +42,15 @@ const ConfigureQuiz = ({location, onLocationChange, timeLimit, onTimeLimitChange
                     onChange={(e) => onLocationChange(e.target.value)}
                     >
                         <option value={"US"}>United States</option>
-                        <option value={"JA"}>Japan</option>
-                        <option value={"EU"}>Europe</option>
+                        <option value={"DA"}>Germany</option>
+                        <option value={"JP"}>Japan</option>
+                        <option value={"MX"}>Mexico</option>
+                        <option value={"GB"}>United Kingdom</option>
+                        <option value={"CA"}>Canada</option>
                     </Select>
                 </FormControl>
 
-                <Button onClick={startGame} className="config-options" variant="secondary" style={{backgroundColor: "#E2ECE9", height: "min(55px, 6vw)"}}><b>Start Round</b></Button>
+                <Button onClick={startGame} className="config-options" variant="outlined" style={{backgroundColor: "#E2ECE9", height: "min(55px, 6vw)"}}><b>Start Round</b></Button>
                 </div>
             </div>
 
