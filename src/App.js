@@ -11,7 +11,6 @@ const App = () => {
     const [date, setDate] = useState(new Date());
 
     const appContent = () => {
-        
         switch(appState) {
             case "config":
                 return <ConfigureQuiz timeLimit={timeLimit} onTimeLimitChange={setTimeLimit} location={location} onLocationChange={setLocation} 
