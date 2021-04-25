@@ -74,7 +74,7 @@ const MCQuestion = ({article, pickNewArticle, pauseTimer, startTimer, onUserWron
                 return option;
             }))
 
-            optionsTemp.push(article.replaceAll("_", " ").replaceAll(/\(([^)]+)\)/g, ""));
+            optionsTemp.push(parseArticle(article));
             // remove duplicates
             optionsTemp = [... new Set(optionsTemp)];
             shuffleArray(optionsTemp);
@@ -84,8 +84,12 @@ const MCQuestion = ({article, pickNewArticle, pauseTimer, startTimer, onUserWron
         fetchOptions();
     }, [article])
 
+    const parseArticle = (name) => {
+        return name.replaceAll("_", " ").replaceAll(/\(([^)]+)\)/g, "")
+    }
+
     const onUserAnswer = (answer) => {
-        if (answer === article.replaceAll("_", " ")) {
+        if (answer === parseArticle(article)) {
             onUserRight();
         } else {
             onUserWrong();
@@ -103,7 +107,7 @@ const MCQuestion = ({article, pickNewArticle, pauseTimer, startTimer, onUserWron
     const renderButtons = options.map(option => {
         let highlight = "";
         if (userSelection) {
-            if (option === article.replaceAll("_", " ")) {
+            if (option === parseArticle(article)) {
                 highlight = "correct";
             } else if (option === userSelection) {
                 highlight = "wrong";
