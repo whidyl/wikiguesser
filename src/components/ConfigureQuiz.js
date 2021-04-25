@@ -42,11 +42,7 @@ const ConfigureQuiz = ({location, onLocationChange, timeLimit, onTimeLimitChange
                     onChange={(e) => onLocationChange(e.target.value)}
                     >
                         <option value={"US"}>United States</option>
-                        <option value={"DA"}>Germany</option>
-                        <option value={"JP"}>Japan</option>
-                        <option value={"MX"}>Mexico</option>
                         <option value={"GB"}>United Kingdom</option>
-                        <option value={"CA"}>Canada</option>
                     </Select>
                 </FormControl>
 
