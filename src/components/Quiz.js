@@ -7,7 +7,7 @@ const Quiz = ({timeLimit, score, setScore, date, endGame, location}) => {
     const [articles, setArticles] = useState([]);
     const [timeLeft, setTimeLeft] = useState(60*timeLimit);
     const [timerID, setTimerID] = useState("");
-    const [currentIndex, setCurrentIndex] = useState(425);//Math.floor(Math.random() * 999));    
+    const [currentIndex, setCurrentIndex] = useState(Math.floor(Math.random() * 999));    
 
     useEffect(() => {
         //TODO: current month and day
