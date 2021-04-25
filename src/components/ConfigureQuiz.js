@@ -10,7 +10,7 @@ const ConfigureQuiz = ({location, onLocationChange, timeLimit, onTimeLimitChange
         <CardContent>
             <Typography variant="h2" style={{fontSize: "min(8vw, 8vh, 60px)"}}>WikiGuesser</Typography>
             <Typography color="textSecondary" style={{fontSize: "min(3vw, 20px, 3vh)"}} gutterBottom>
-                WikiGuesser is a randomly generated trivia game. You will recieve snippits from random popular Wikipedia articles, but the name of the article will be hidden. See how many articles you can guess withing the time limit! You can configure the game below before playing.
+                WikiGuesser is a randomly generated trivia game. You will recieve snippits from random popular Wikipedia articles, but the name of the article will be hidden. See how many articles you can guess within the time limit! You can configure the game below before playing.
             </Typography>
             <Alert severity="info" style={{fontSize: "min(2vw, 14px, 3vh)"}}> WikiGuesser pulls from the 1000 most visited Wikipedia articles of the day. These articles may, by chance, be inappropriate or offensive to some users. </Alert>
             <hr className="divider" />
